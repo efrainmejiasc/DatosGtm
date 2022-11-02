@@ -23,11 +23,11 @@ namespace DatosGTMNegocio.Services
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post,"");
             var formData = new List<KeyValuePair<string, string>>();
-            formData.Add(new KeyValuePair<string, string>( "client_id", AdobePdfApi.client_id));
+            formData.Add(new KeyValuePair<string, string>("client_id", AdobePdfApi.client_id));
             formData.Add(new KeyValuePair<string, string>("client_secret", AdobePdfApi.client_secret));
-            formData.Add(new KeyValuePair<string, string>("organization_id", AdobePdfApi .organization_id));
-            formData.Add(new KeyValuePair<string, string>("account_id", AdobePdfApi .account_id ));
-            formData.Add(new KeyValuePair<string, string>("private_key_file",AdobePdfApi .private_key_file));
+            formData.Add(new KeyValuePair<string, string>("organization_id", AdobePdfApi.organization_id));
+            formData.Add(new KeyValuePair<string, string>("account_id", AdobePdfApi.account_id));
+            formData.Add(new KeyValuePair<string, string>("private_key_file", AdobePdfApi.private_key_file));
             request.Content = new FormUrlEncodedContent(formData);
             var response = await client.SendAsync(request);
             if (response.IsSuccessStatusCode)
