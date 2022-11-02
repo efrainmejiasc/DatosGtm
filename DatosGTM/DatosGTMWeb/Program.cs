@@ -1,9 +1,11 @@
 using DatosGTMModelo.DataModel;
 using DatosGTMModelo.IRepositories;
 using DatosGTMModelo.Repositories;
+using DatosGTMNegocio.Helpers;
 using DatosGTMNegocio.IServices;
 using DatosGTMNegocio.Services;
 using Microsoft.EntityFrameworkCore;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +36,13 @@ builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<MyAppContext, MyAppContext>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+
+AdobePdfApi.client_id = builder.Configuration["ADOBE_PDF_API:client_id"];
+AdobePdfApi.client_secret = builder.Configuration["ADOBE_PDF_API:client_secret"];
+AdobePdfApi.organization_id = builder.Configuration["ADOBE_PDF_API:organization_id"];
+AdobePdfApi.account_id = builder.Configuration["ADOBE_PDF_API:account_id"];
+AdobePdfApi.private_key_file = builder.Configuration["ADOBE_PDF_API:private_key_file"];
+
 
 var app = builder.Build();
 
