@@ -37,11 +37,11 @@ builder.Services.AddScoped<MyAppContext, MyAppContext>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
-AdobePdfApi.client_id = builder.Configuration["ADOBE_PDF_API:client_id"];
-AdobePdfApi.client_secret = builder.Configuration["ADOBE_PDF_API:client_secret"];
-AdobePdfApi.organization_id = builder.Configuration["ADOBE_PDF_API:organization_id"];
-AdobePdfApi.account_id = builder.Configuration["ADOBE_PDF_API:account_id"];
-AdobePdfApi.private_key_file = builder.Configuration["ADOBE_PDF_API:private_key_file"];
+AdobePdfApi.client_id = builder.Configuration["ADOBE_PDF_API:client_credentials:client_id"];
+AdobePdfApi.client_secret = builder.Configuration["ADOBE_PDF_API:client_credentials:client_secret"];
+AdobePdfApi.organization_id = builder.Configuration["ADOBE_PDF_API:service_account_credentials:organization_id"];
+AdobePdfApi.account_id = builder.Configuration["ADOBE_PDF_API:service_account_credentials:account_id"];
+AdobePdfApi.private_key_file = builder.Configuration["ADOBE_PDF_API:service_account_credentials:private_key_file"];
 
 
 var app = builder.Build();
