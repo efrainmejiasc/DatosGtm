@@ -40,14 +40,18 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IRequestService, RequestService>();
 
-
+AdobePdfApi.urlAdobePdfApiJwt = builder.Configuration["ADOBE_PDF_API:urlAdobePdfApiJwt"];
 AdobePdfApi.urlAdobePdfApiAutorizacion = builder.Configuration["ADOBE_PDF_API:urlAdobePdfApiAutorizacion"];
 AdobePdfApi.urlAdobePdfApiToken= builder.Configuration["ADOBE_PDF_API:urlAdobePdfApiToken"];
 AdobePdfApi.client_id = builder.Configuration["ADOBE_PDF_API:client_credentials:client_id"];
 AdobePdfApi.client_secret = builder.Configuration["ADOBE_PDF_API:client_credentials:client_secret"];
 AdobePdfApi.organization_id = builder.Configuration["ADOBE_PDF_API:service_account_credentials:organization_id"];
 AdobePdfApi.account_id = builder.Configuration["ADOBE_PDF_API:service_account_credentials:account_id"];
-AdobePdfApi.private_key_file = builder.Configuration["ADOBE_PDF_API:service_account_credentials:private_key_file"]; ;
+AdobePdfApi.private_key_file = builder.Configuration["ADOBE_PDF_API:service_account_credentials:private_key_file"];
+AdobePdfApi.certificado = builder.Configuration["ADOBE_PDF_API:service_account_credentials:certificado];
+AdobePdfApi.metascope = builder.Configuration["ADOBE_PDF_API:metascope"];
+AdobePdfApi.passcertificado = builder.Configuration["ADOBE_PDF_API:passcertificado"];
+AdobePdfApi.urlAudience = builder.Configuration["ADOBE_PDF_API:urlAudience"];
 
 
 var app = builder.Build();

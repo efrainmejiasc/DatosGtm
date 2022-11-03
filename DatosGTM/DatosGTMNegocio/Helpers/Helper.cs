@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Jose;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -36,6 +39,26 @@ namespace DatosGTMNegocio.Helpers
         public static string ReadFile(string path)
         {
             return File.ReadAllText(path);
+        }
+
+        public static string GetKeyCertificado(string path)
+        {
+            Dictionary<object, object> test = new Dictionary<object, object>();
+            test.Add("exp", DateTimeOffset.Now.ToUnixTimeSeconds() + 600);
+            test.Add("iss", AdobePdfApi.organization_id );
+            test.Add("sub", AdobePdfApi.account_id );
+            test.Add("aud", AdobePdfApi.urlAudience  + AdobePdfApi .client_id );
+            string[] scopes = AdobePdfApi.metascope .Split(',');
+
+            foreach (string scope in scopes)
+            {
+                test.Add(scope, true);
+            }
+
+            X509Certificate2 cert = new X509Certificate2(path, AdobePdfApi .passcertificado );
+            string token = Jose.JWT.Encode(test, cert.GetRSAPrivateKey(), JwsAlgorithm.RS256);
+
+            return token;
         }
     }
 }
