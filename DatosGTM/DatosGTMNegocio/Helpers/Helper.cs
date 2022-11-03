@@ -33,5 +33,9 @@ namespace DatosGTMNegocio.Helpers
         {
             return Guid.NewGuid();
         }
+        public static string ReadFile(string path)
+        {
+            return File.ReadAllText(path);
+        }
     }
 }
