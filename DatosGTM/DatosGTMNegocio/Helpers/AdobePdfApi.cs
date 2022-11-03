@@ -21,6 +21,7 @@ namespace DatosGTMNegocio.Helpers
         public static string passcertificado { get; set; }
         public static string urlAudience{ get; set; }
         public static string certificado{ get; set; }
+        public static string certificado_key_filetext { get; set; }
 
     }
 }

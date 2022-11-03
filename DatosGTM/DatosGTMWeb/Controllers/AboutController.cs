@@ -31,10 +31,10 @@ namespace DatosGTMWeb.Controllers
             respuesta.Estado = false;
             try
             {
-                AdobePdfApi.private_key_filetext = Helper.ReadFile(this._webHostEnvironment.WebRootPath + AdobePdfApi.private_key_file);
-                var keyCertificado = Helper.GetKeyCertificado(this._webHostEnvironment.WebRootPath + AdobePdfApi.certificado );
+                //AdobePdfApi.private_key_filetext = Helper.ReadFile(this._webHostEnvironment.WebRootPath + AdobePdfApi.private_key_file);
+                AdobePdfApi .certificado_key_filetext = Helper.GetKeyCertificado(this._webHostEnvironment.WebRootPath + AdobePdfApi.certificado );
                
-                respuesta.Mensaje = await this._requestService.ObtenerJWTAsync(AdobePdfApi.urlAdobePdfApiAutorizacion);
+                respuesta.Mensaje = await this._requestService.ObtenerJWTAsync(AdobePdfApi.urlAdobePdfApiJwt );
             }
             catch (Exception ex)
             {
