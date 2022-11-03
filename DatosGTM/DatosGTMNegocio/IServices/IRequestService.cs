@@ -9,5 +9,6 @@ namespace DatosGTMNegocio.IServices
     public interface IRequestService
     {
         Task<string> ObtenerJWTAsync(string urlAdobePdfApi);
+        Task<string> ObtenerJWTPostAsync(string urlAdobePdfApiJwt);
     }
 }

@@ -34,7 +34,7 @@ namespace DatosGTMWeb.Controllers
                 //AdobePdfApi.private_key_filetext = Helper.ReadFile(this._webHostEnvironment.WebRootPath + AdobePdfApi.private_key_file);
                 AdobePdfApi .certificado_key_filetext = Helper.GetKeyCertificado(this._webHostEnvironment.WebRootPath + AdobePdfApi.certificado );
                
-                respuesta.Mensaje = await this._requestService.ObtenerJWTAsync(AdobePdfApi.urlAdobePdfApiJwt );
+                respuesta.Mensaje = await this._requestService.ObtenerJWTPostAsync(AdobePdfApi.urlAdobePdfApiJwt );
             }
             catch (Exception ex)
             {
