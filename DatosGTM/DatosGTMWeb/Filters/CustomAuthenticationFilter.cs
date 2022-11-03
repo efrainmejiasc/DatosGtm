@@ -19,14 +19,14 @@ namespace DatosGTMWeb.Filters
             {
                 base.OnActionExecuting(filterContext);
 
-                /*if (string.IsNullOrEmpty(this.httpContext.HttpContext.Session.GetString("UsuarioLogin")))
+                if (string.IsNullOrEmpty(this.httpContext.HttpContext.Session.GetString("UsuarioLogin")))
                 {
                     if (filterContext.Controller is LoginController == false)
                     {
                         filterContext.HttpContext.Response.Redirect("/Login/Index");
                     }
 
-                }*/
+                }
             }
             catch
             {

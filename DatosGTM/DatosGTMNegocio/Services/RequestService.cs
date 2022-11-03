@@ -53,7 +53,6 @@ namespace DatosGTMNegocio.Services
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Add("cache-control", "no-cache");
-            client.DefaultRequestHeaders.Add("cache-control", "no-cache");
             HttpResponseMessage response = await client.PostAsync(urlAdobePdfApi , new StringContent(jsonDocumento, Encoding.UTF8, "application/json"));
             if (response.IsSuccessStatusCode)
             {
