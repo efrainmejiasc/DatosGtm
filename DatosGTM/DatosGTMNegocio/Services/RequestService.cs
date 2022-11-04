@@ -17,30 +17,31 @@ namespace DatosGTMNegocio.Services
 {
     public  class RequestService:IRequestService
     {
-        public async Task<string> ObtenerJWTAsync(string urlAdobePdfApi)
+        public async Task<AdobePdfApiTokenModel> ObtenerJWTAsync(string urlAdobePdfApi)
         {
             var respuesta = string.Empty;
-            HttpClient client = new HttpClient();
-            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.Add("cache-control", "no-cache");
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post,urlAdobePdfApi);
-            var formData = new List<KeyValuePair<string, string>>();
-            formData.Add(new KeyValuePair<string, string>("client_id", AdobePdfApi.client_id));
-            formData.Add(new KeyValuePair<string, string>("client_secret", AdobePdfApi.client_secret));
-            formData.Add(new KeyValuePair<string, string>("jwt_token", AdobePdfApi .certificado_key_filetext ));
-             request.Content = new FormUrlEncodedContent(formData);
-            var response = await client.SendAsync(request);
-            if (response.IsSuccessStatusCode)
+            var adobePdfApiTokenModel = new AdobePdfApiTokenModel();
+            using (var httpClient = new HttpClient())
             {
-                respuesta = response.Content.ReadAsStringAsync().Result;
-                //token = JsonConvert.DeserializeObject<Token>(cadenaToken);
-            }
-            else
-                respuesta = response.StatusCode.ToString();
+                using (var request = new HttpRequestMessage(new HttpMethod("POST"), "https://ims-na1.adobelogin.com/ims/exchange/jwt/"))
+                {
+                    request.Headers.TryAddWithoutValidation("Cache-Control", "no-cache");
 
-            return respuesta;
+                    var multipartContent = new MultipartFormDataContent();
+                    multipartContent.Add(new StringContent(AdobePdfApi .client_id ), "client_id");
+                    multipartContent.Add(new StringContent(AdobePdfApi.client_secret ), "client_secret");
+                    multipartContent.Add(new StringContent("eyJhbGciOiJSUzI1NiJ9.eyJleHAiOjE2Njc2NTI5NzksImlzcyI6IkE2QTgxRjc1NjM2MTUzMUEwQTQ5NUM1NUBBZG9iZU9yZyIsInN1YiI6IkE0QzYxRjRDNjM2MTVFNzEwQTQ5NUUyN0B0ZWNoYWNjdC5hZG9iZS5jb20iLCJodHRwczovL2ltcy1uYTEuYWRvYmVsb2dpbi5jb20vcy9lbnRfZG9jdW1lbnRjbG91ZF9zZGsiOnRydWUsImF1ZCI6Imh0dHBzOi8vaW1zLW5hMS5hZG9iZWxvZ2luLmNvbS9jL2JhOWU1YTg4NWEzNDRjZjFhYzgzZmMyMDM2ZjhlOWFmIn0.c5wS-J30h-yRJZavHWQmDMzicIB6VqZbYKGN4vFXiSX2ebXUJNKDrrbp6JdPh0h4L4tUiLx-aRAduRVZcZEnqqIZVc6bFyl6S1JNG1O6DdfyV4NQoPR6MHV6Ix6kFH5Db1-GKYjKqaDafTB4QpxPZCa75SR8LucmJz5rvyPYDpeCvRiq7kHr2CaUKzumE4iPscJj8WzS5KS9oUFEY4XtPCH0F6h0NGW0avqYj9HrOL4JZmtUSgKtlQQtw8f0TPmwb43y-lVcJlKYSdMafouFRv6CF4wn8dYwnVNpNXOdhnbePeAF0nysL_42nfwOkAPv7GTDDleOybbzu-RbA3cfBQ"), "jwt_token");
+                    request.Content = multipartContent;
+
+                    var response = await httpClient.SendAsync(request);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        respuesta = response.Content.ReadAsStringAsync().Result;
+                        adobePdfApiTokenModel = JsonConvert.DeserializeObject<AdobePdfApiTokenModel>(respuesta);
+                    }
+                }
+            }
+            return adobePdfApiTokenModel;
         }
 
         public async Task<string> ObtenerJWTPostAsync(string urlAdobePdfApi)
