@@ -33,8 +33,9 @@ namespace DatosGTMWeb.Controllers
             {
                 //AdobePdfApi.private_key_filetext = Helper.ReadFile(this._webHostEnvironment.WebRootPath + AdobePdfApi.private_key_file);
                 AdobePdfApi .certificado_key_filetext = Helper.GetKeyCertificado(this._webHostEnvironment.WebRootPath + AdobePdfApi.certificado );
-               
-                respuesta.Mensaje = await this._requestService.ObtenerJWTAsync(AdobePdfApi.urlAdobePdfApiToken);
+                var adobePdfApiTokenModel = await this._requestService.ObtenerJWTAsync(AdobePdfApi.urlAdobePdfApiToken);
+                respuesta.Mensaje = adobePdfApiTokenModel.token_type == "Bearer" ? "Token Obtenido Correctament" : "Fallo Obtener el Token";
+                respuesta.Estado = adobePdfApiTokenModel.token_type == "Bearer" ? true : false; ;
             }
             catch (Exception ex)
             {
