@@ -37,21 +37,30 @@ try
 
     Console.WriteLine(token); //Intermediate JWT Token
 
-    var client = new RestClient("https://ims-na1.adobelogin.com/ims/exchange/jwt/");
+    var client = new RestClient("https://ims-na1.adobelogin.com/ims/authorize/v2");
 
     var request = new RestRequest(Method.Post.ToString());
     request.AddHeader("cache-control", "no-cache");
-    request.AddHeader("content-type", "multipart/form-data; boundary=----boundary");
-    request.AddParameter("multipart/form-data; boundary=----boundary",
-        "------boundary\r\nContent-Disposition: form-data; name=\"client_id\"\r\n\r\n" + CLIENT_ID +
-        "\r\n------boundary\r\nContent-Disposition: form-data; name=\"client_secret\"\r\n\r\n" + CLIENT_SECRET +
-        "\r\n------boundary\r\nContent-Disposition: form-data; name=\"jwt_token\"\r\n\r\n" + token +
-        "\r\n------boundary--", ParameterType.RequestBody);
+    request.AddHeader("content-type", "application/json");
+    request.AddParameter("client_id", CLIENT_ID);
+    request.AddParameter("client_secret", CLIENT_SECRET);
+    request.AddParameter("jwt_token", token);
+  
+  /*  request.AddParameter("multipart/form-data; boundary=----boundary",
+        "------boundary Content-Disposition: form-data; name=client_id " + CLIENT_ID +
+        "------boundary Content-Disposition: form-data; name=client_secret " + CLIENT_SECRET +
+        "------boundary\r\nContent-Disposition: form-data; name=jwt_token" + token +
+        "------boundary--", ParameterType.RequestBody);*/
 
 
     RestResponse response = client.Execute(request);
 
+    if(response.IsSuccessStatusCode)
     Console.WriteLine(response.Content);
+    else
+        Console.WriteLine(response.Content);
+
+    Console.ReadKey();
 }
 catch (Exception e)
 {
