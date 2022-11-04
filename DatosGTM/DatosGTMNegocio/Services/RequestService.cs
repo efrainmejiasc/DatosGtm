@@ -23,7 +23,7 @@ namespace DatosGTMNegocio.Services
             var adobePdfApiTokenModel = new AdobePdfApiTokenModel();
             using (var httpClient = new HttpClient())
             {
-                using (var request = new HttpRequestMessage(new HttpMethod("POST"), "https://ims-na1.adobelogin.com/ims/exchange/jwt/"))
+                using (var request = new HttpRequestMessage(new HttpMethod("POST"), AdobePdfApi.urlAdobePdfApiToken))
                 {
                     request.Headers.TryAddWithoutValidation("Cache-Control", "no-cache");
 
