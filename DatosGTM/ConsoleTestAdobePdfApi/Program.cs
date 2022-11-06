@@ -6,10 +6,10 @@ using System.IO;
 using System.Security.Cryptography.X509Certificates;
 
 
-const string CLIENT_ID = "ba9e5a885a344cf1ac83fc2036f8e9af";        
-const string CLIENT_SECRET = "p8e-M4YAl1sWp3PAGw8NacDNmqZAeX3I_1Ex";         
-const string TECH_ACC_ID = "A4C61F4C63615E710A495E27@techacct.adobe.com";    
-const string ORG_ID = "A6A81F756361531A0A495C55@AdobeOrg";               
+const string CLIENT_ID = "95a27340b5314f05ad0d7e8204297c58";        
+const string CLIENT_SECRET = "p8e-274o2RZeQRlv3_afTrOoT76yBV-rFpY7";         
+const string TECH_ACC_ID = "2454205A6366CFB40A495F95@techacct.adobe.com";    
+const string ORG_ID = "2CAD1EA96366BFFF0A495E88@AdobeOrg";               
 const string METASCOPES = "https://ims-na1.adobelogin.com/s/ent_documentcloud_sdk";
 
 
@@ -46,19 +46,18 @@ try
 
     Console.WriteLine(token); //Intermediate JWT Token
 
-    token = "eyJhbGciOiJSUzI1NiJ9.eyJleHAiOjE2Njc3NjE5MzIsImlzcyI6IkE2QTgxRjc1NjM2MTUzMUEwQTQ5NUM1NUBBZG9iZU9yZyIsInN1YiI6IkE0QzYxRjRDNjM2MTVFNzEwQTQ5NUUyN0B0ZWNoYWNjdC5hZG9iZS5jb20iLCJodHRwczovL2ltcy1uYTEuYWRvYmVsb2dpbi5jb20vcy9lbnRfZG9jdW1lbnRjbG91ZF9zZGsiOnRydWUsImF1ZCI6Imh0dHBzOi8vaW1zLW5hMS5hZG9iZWxvZ2luLmNvbS9jL2JhOWU1YTg4NWEzNDRjZjFhYzgzZmMyMDM2ZjhlOWFmIn0.sTQLF_JzZ0LwvApjJ-183yfiyhZP4dFF4Ek4MxM6c-uKuLn1sb0_ppk_sFmbuofGvd1UH7_X6W-RkUUjdjMv2URc8GcLR4SYJPRMcSpl7E-0HcWqpNWMavRhvkyUdtcLAq5DyTv_zKoLIwFCDj0c3VDTnntXaVEpvAqGp5ImlFTryY5tU2SNZTV2Q_xeo3bfUb-3J-xwmH3Zn008UhPpRISNfNYDBdsD84mQGS8upK0AfL2xaoGt8kvBChKWrQ48WYAtvGhE1DhlsqmbUu5KkqyU2VTadh3ROKWEpx3-HNlYhewumsaX0IN-UT-C0_RL15EMiExI7S6sep-xmF25LA";
+    //token = "";
     var respuesta = string.Empty;
     using (var httpClient = new HttpClient())
     {
         using (var request = new HttpRequestMessage(new HttpMethod("POST"), "https://ims-na1.adobelogin.com/ims/exchange/jwt/"))
         {
-            
             request.Headers.TryAddWithoutValidation("Cache-Control", "no-cache");
 
             var multipartContent = new MultipartFormDataContent();
             multipartContent.Add(new StringContent(CLIENT_ID), "client_id");
             multipartContent.Add(new StringContent(CLIENT_SECRET), "client_secret");
-            multipartContent.Add(new StringContent("eyJhbGciOiJSUzI1NiJ9.eyJleHAiOjE2Njc3NjE5MzIsImlzcyI6IkE2QTgxRjc1NjM2MTUzMUEwQTQ5NUM1NUBBZG9iZU9yZyIsInN1YiI6IkE0QzYxRjRDNjM2MTVFNzEwQTQ5NUUyN0B0ZWNoYWNjdC5hZG9iZS5jb20iLCJodHRwczovL2ltcy1uYTEuYWRvYmVsb2dpbi5jb20vcy9lbnRfZG9jdW1lbnRjbG91ZF9zZGsiOnRydWUsImF1ZCI6Imh0dHBzOi8vaW1zLW5hMS5hZG9iZWxvZ2luLmNvbS9jL2JhOWU1YTg4NWEzNDRjZjFhYzgzZmMyMDM2ZjhlOWFmIn0.sTQLF_JzZ0LwvApjJ-183yfiyhZP4dFF4Ek4MxM6c-uKuLn1sb0_ppk_sFmbuofGvd1UH7_X6W-RkUUjdjMv2URc8GcLR4SYJPRMcSpl7E-0HcWqpNWMavRhvkyUdtcLAq5DyTv_zKoLIwFCDj0c3VDTnntXaVEpvAqGp5ImlFTryY5tU2SNZTV2Q_xeo3bfUb-3J-xwmH3Zn008UhPpRISNfNYDBdsD84mQGS8upK0AfL2xaoGt8kvBChKWrQ48WYAtvGhE1DhlsqmbUu5KkqyU2VTadh3ROKWEpx3-HNlYhewumsaX0IN-UT-C0_RL15EMiExI7S6sep-xmF25LA"), "jwt_token");
+            multipartContent.Add(new StringContent(token), "jwt_token");
             request.Content = multipartContent;
 
             var response = await httpClient.SendAsync(request);

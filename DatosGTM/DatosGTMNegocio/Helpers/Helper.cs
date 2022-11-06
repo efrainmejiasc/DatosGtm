@@ -44,7 +44,7 @@ namespace DatosGTMNegocio.Helpers
         public static string GetKeyCertificado(string path)
         {
             Dictionary<object, object> test = new Dictionary<object, object>();
-            test.Add("exp", DateTimeOffset.Now.ToUnixTimeSeconds() + 600);
+            test.Add("exp", DateTimeOffset.Now.ToUnixTimeSeconds());
             test.Add("iss", AdobePdfApi.organization_id );
             test.Add("sub", AdobePdfApi.account_id );
             string[] scopes = AdobePdfApi.metascope .Split(',');
