@@ -5,9 +5,10 @@ using DatosGTMNegocio.Helpers;
 using DatosGTMNegocio.IServices;
 using DatosGTMNegocio.Services;
 using DatosGTMWeb.Filters;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using System.Configuration;
-
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,5 +71,31 @@ app.MapControllerRoute(
 
 app.UseSession();
 app.Run();
+
+//******************************************************************************
+var culturaInglesa = "en-US";
+var culturaEspañola = "es-ES";
+var ci = new CultureInfo(culturaInglesa);
+ci.NumberFormat.NumberDecimalSeparator = ".";
+ci.NumberFormat.CurrencyDecimalSeparator = ".";
+var ce = new CultureInfo(culturaEspañola);
+ce.NumberFormat.NumberDecimalSeparator = ",";
+ce.NumberFormat.CurrencyDecimalSeparator = ",";
+CultureInfo.DefaultThreadCurrentCulture = ci;
+CultureInfo.DefaultThreadCurrentUICulture = ci;
+
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture(ci),
+    SupportedCultures = new List<CultureInfo>
+    {
+     ci,ce
+    },
+    SupportedUICultures = new List<CultureInfo>
+    {
+    ci,ce
+    }
+});
+//******************************************************************************
 
 
