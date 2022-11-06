@@ -30,7 +30,7 @@ namespace DatosGTMNegocio.Services
                     var multipartContent = new MultipartFormDataContent();
                     multipartContent.Add(new StringContent(AdobePdfApi.client_id ), "client_id");
                     multipartContent.Add(new StringContent(AdobePdfApi.client_secret ), "client_secret");
-                    multipartContent.Add(new StringContent(AdobePdfApi.certificado_key_filetext ), "jwt_token");
+                    multipartContent.Add(new StringContent(AdobePdfApi.certificado_key_filetext), "jwt_token");
                     request.Content = multipartContent;
 
                     var response = await httpClient.SendAsync(request);
