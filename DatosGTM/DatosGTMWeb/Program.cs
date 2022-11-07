@@ -31,7 +31,7 @@ builder.Services.AddSession(options =>
 });
 builder.Services.AddMvc();
 builder.Services.AddDbContext<MyAppContext>(
-    op => op.UseSqlServer(@"Server=EMCSERVERHP\SQLEXPRESS;DataBase=DatosGTM;User Id=sa;Password=1234santiago;MultipleActiveResultSets=false;Connection Timeout=120;TrustServerCertificate=True;",
+    op => op.UseSqlServer(@"Server=EMCSERVERASUS\SQLEXPRESS;DataBase=DatosGTM;User Id=sa;Password=1234santiago;MultipleActiveResultSets=false;Connection Timeout=120;TrustServerCertificate=True;",
     b => b.MigrationsAssembly("DatosGTMModelo")));
 
 
