@@ -53,6 +53,7 @@ AdobePdfApi.certificado = builder.Configuration["ADOBE_PDF_API:service_account_c
 AdobePdfApi.metascope = builder.Configuration["ADOBE_PDF_API:metascope"];
 AdobePdfApi.passcertificado = builder.Configuration["ADOBE_PDF_API:passcertificado"];
 AdobePdfApi.urlAudience = builder.Configuration["ADOBE_PDF_API:urlAudience"];
+AdobePdfApi.pdf_files = builder.Configuration["ADOBE_PDF_API:pdf_files"];
 
 
 var app = builder.Build();
