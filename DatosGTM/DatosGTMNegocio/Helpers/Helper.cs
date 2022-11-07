@@ -44,7 +44,7 @@ namespace DatosGTMNegocio.Helpers
         public static string GetKeyCertificado(string path)
         {
             Dictionary<object, object> test = new Dictionary<object, object>();
-            test.Add("exp", DateTimeOffset.Now.AddDays (1).ToUnixTimeSeconds());
+            test.Add("exp", DateTimeOffset.Now.AddDays(1).ToUnixTimeSeconds() + 600);
             test.Add("iss", AdobePdfApi.organization_id );
             test.Add("sub", AdobePdfApi.account_id );
             string[] scopes = AdobePdfApi.metascope .Split(',');
@@ -58,7 +58,8 @@ namespace DatosGTMNegocio.Helpers
             X509Certificate2 cert = new X509Certificate2(path, AdobePdfApi.passcertificado );
             string token = Jose.JWT.Encode(test, cert.GetRSAPrivateKey(), JwsAlgorithm.RS256);
 
-            return token.Replace("IsInR5cCI6IkpXVC", "");
+            //return token.Replace("IsInR5cCI6IkpXVC", "");
+            return token;
         }
     }
 }
