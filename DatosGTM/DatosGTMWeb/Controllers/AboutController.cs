@@ -1,6 +1,7 @@
 ﻿using DatosGTMlWeb.Models;
 using DatosGTMNegocio.Helpers;
 using DatosGTMNegocio.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -31,7 +32,6 @@ namespace DatosGTMWeb.Controllers
             respuesta.Estado = false;
             try
             {
-                //AdobePdfApi.private_key_filetext = Helper.ReadFile(this._webHostEnvironment.WebRootPath + AdobePdfApi.private_key_file);
                 AdobePdfApi .certificado_key_filetext = Helper.GetKeyCertificado(this._webHostEnvironment.WebRootPath + AdobePdfApi.certificado );
                 var adobePdfApiTokenModel = await this._requestService.ObtenerJWTAsync(AdobePdfApi.urlAdobePdfApiToken);
                 respuesta.Mensaje = adobePdfApiTokenModel.token_type == "bearer" ? "Token Obtenido Correctamente" : "Fallo Obtener el Token";
@@ -44,5 +44,48 @@ namespace DatosGTMWeb.Controllers
 
             return Json(respuesta);
         }
+
+
+        [HttpPost]
+        //[AllowAnonymous]
+        //[Route("api/UploadFileMethod")]
+        public RespuestaModel UploadFileMethod(IFormFile file)
+        {
+            var respuesta = new RespuestaModel();
+            respuesta.Estado = false;
+            if (file != null)
+            {
+                try
+                {
+                    var p = file.FileName.Replace("_", "").Replace("/", "").Split('.');
+                    var name = p[0] + "_" + DateTime.Now.ToString().Replace("/","") + DateTime.Now.Millisecond  + ".pdf";
+                    if (file.FileName.ToUpper().Contains(".PDF"))
+                    {
+                        string path = this._webHostEnvironment.WebRootPath+ AdobePdfApi.pdf_files + name;
+                        var stream = System.IO.File.Create(path);
+                        file.CopyTo(stream);
+                        stream.Dispose();
+                    }
+                    else
+                    {
+                        respuesta.Mensaje  = "El archivo debe ser de de extencion .pdf";
+                        return respuesta;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    respuesta.Mensaje = ex.Message;
+                }
+            }
+            else
+            {
+                respuesta.Mensaje = "El valor no puede ser nulo";
+            }
+
+            respuesta.Mensaje = "Archivo cargado correctamente";
+            return respuesta;
+        }
+
     }
 }

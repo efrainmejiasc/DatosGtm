@@ -58,7 +58,6 @@ namespace DatosGTMNegocio.Helpers
             X509Certificate2 cert = new X509Certificate2(path, AdobePdfApi.passcertificado );
             string token = Jose.JWT.Encode(test, cert.GetRSAPrivateKey(), JwsAlgorithm.RS256);
 
-            //return token.Replace("IsInR5cCI6IkpXVC", "");
             return token;
         }
     }
