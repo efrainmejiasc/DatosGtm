@@ -13,26 +13,29 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using DatosGTMNegocio.DTOs;
 
 namespace DatosGTMNegocio.Services
 {
     public class AdobeExtractInfo
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(AdobeExtractInfo));
-        public static void ExtractInfo (string pathCredenciales, string fileReadPath, string fileSave)
+        public static ParametrosModel ExtractInfo (string pathCredenciales, string pathReadFile, string pathFileSave)
         {
+            var completeName = string.Empty;
+            var respuesta = new ParametrosModel();
+            respuesta.Estado = false;
             ConfigureLogging();
             try
             {
-                var pathTime = Directory.GetCurrentDirectory() + "/pdfservices-api-credentials.json";
-                ClientConfig clientConfig = ClientConfig.ConfigBuilder().FromFile(pathTime).Build();
+                ClientConfig clientConfig = ClientConfig.ConfigBuilder().FromFile(pathCredenciales).Build();
 
                 Credentials credentials = Credentials.ServiceAccountCredentialsBuilder().FromFile(pathCredenciales).Build();
 
                 Adobe.PDFServicesSDK.ExecutionContext executionContext = Adobe.PDFServicesSDK.ExecutionContext.Create(credentials);
                 ExtractPDFOperation extractPdfOperation = ExtractPDFOperation.CreateNew();
 
-                var pathFromFile = FileRef.CreateFromLocalFile(fileReadPath);
+                var pathFromFile = FileRef.CreateFromLocalFile(pathReadFile);
                 FileRef sourceFileRef = pathFromFile;
                 extractPdfOperation.SetInputFile(sourceFileRef);
 
@@ -41,35 +44,54 @@ namespace DatosGTMNegocio.Services
                     .Build();
                 extractPdfOperation.SetOptions(extractPdfOptions);
 
-                FileRef result = extractPdfOperation.Execute(executionContext);
+                completeName = (DateTime.Now.ToString().Replace("/", "") + DateTime.Now.Millisecond.ToString().Replace(" ", "")).Replace (":", "") + "_";
+                pathFileSave = (pathFileSave + "pdfResult_" + completeName + ".zip").Replace(" ", "");
 
-                result.SaveAs(fileSave);
+                FileRef result = extractPdfOperation.Execute(executionContext);
+                result.SaveAs(pathFileSave);
+
+                respuesta.Estado = true;
+                respuesta.NombreArchivo = completeName;
+                respuesta.Mensaje = "Transaccion Exitosa";
             }
             catch (ServiceUsageException ex)
             {
                 log.Error("Exception encountered while executing operation", ex);
+                respuesta.Mensaje = ex.Message;
+                return respuesta;
             }
             catch (ServiceApiException ex)
             {
                 log.Error("Exception encountered while executing operation", ex);
+                respuesta.Mensaje = ex.Message;
+                return respuesta;
             }
             catch (SDKException ex)
             {
                 log.Error("Exception encountered while executing operation", ex);
+                respuesta.Mensaje = ex.Message;
+                return respuesta;
             }
             catch (IOException ex)
             {
                 log.Error("Exception encountered while executing operation", ex);
+                respuesta.Mensaje = ex.Message;
+                return respuesta;
             }
             catch (Exception ex)
             {
                 log.Error("Exception encountered while executing operation", ex);
+                respuesta.Mensaje = ex.Message;
+                return respuesta;
             }
+
+            return respuesta;
         }
 
         static void ConfigureLogging()
         {
-            ILoggerRepository logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
+            var ensamblado = Assembly.GetEntryAssembly();
+            ILoggerRepository logRepository = LogManager.GetRepository(ensamblado);
             XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
         }
     }

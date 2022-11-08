@@ -9,6 +9,7 @@
     var urlRequest = '@Url.Action("Request","About")';
     var urlUploadFile = '@Url.Action("UploadFileMethod","About")';
     var urlLeerArchivo = '@Url.Action("LeerArchivo","About")';
+    var urlExtraerInfo = '@Url.Action("ExtraerInfo","About")';
 </script>
 
 <div class="card" style="margin-top:5%;">
@@ -29,6 +30,10 @@
                 <br /><br />
                 <div>
                 <input type="button" onclick="LeerArchivo();" class="btn btn-primary" value="Leer Archivo" />
+                </div>
+                 <br /><br />
+                <div>
+                <input type="button" onclick="ExtraerInfo();" class="btn btn-primary" value="Extraer Info" />
                 </div>
       </div>
    </div>

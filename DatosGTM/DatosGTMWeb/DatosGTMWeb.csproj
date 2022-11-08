@@ -32,6 +32,10 @@
     <ProjectReference Include="..\DatosGTMNegocio\DatosGTMNegocio.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\pdf_filesExtract\" />
+  </ItemGroup>
+
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>

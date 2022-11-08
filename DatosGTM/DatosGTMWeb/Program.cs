@@ -53,8 +53,10 @@ AdobePdfApi.certificado = builder.Configuration["ADOBE_PDF_API:service_account_c
 AdobePdfApi.metascope = builder.Configuration["ADOBE_PDF_API:metascope"];
 AdobePdfApi.passcertificado = builder.Configuration["ADOBE_PDF_API:passcertificado"];
 AdobePdfApi.urlAudience = builder.Configuration["ADOBE_PDF_API:urlAudience"];
-AdobePdfApi.pdf_files = builder.Configuration["ADOBE_PDF_API:pdf_files"];
-
+AdobePdfApi.pdf_filesToRead = builder.Configuration["ADOBE_PDF_API:pdf_filesToRead"];
+AdobePdfApi.pdf_filesToWrite = builder.Configuration["ADOBE_PDF_API:pdf_filesToWrite"];
+AdobePdfApi.pdf_filesExtract = builder.Configuration["ADOBE_PDF_API:pdf_filesExtract"];
+AdobePdfApi.file_credentials= builder.Configuration["ADOBE_PDF_API:file_credentials"];
 
 var app = builder.Build();
 

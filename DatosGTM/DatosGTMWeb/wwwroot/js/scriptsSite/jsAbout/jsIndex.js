@@ -76,3 +76,22 @@ function LeerArchivo() {
         }
     );
 }
+
+
+function ExtraerInfo() {
+
+    $.ajax(
+        {
+            url: urlExtraerInfo,
+            type: "POST",
+            success: function (data) {
+                if (data.estado) {
+                    toastr.success(data.mensaje);
+                }
+                else
+                    toastr.error(data.mensaje)
+            }
+        }
+    );
+}
+

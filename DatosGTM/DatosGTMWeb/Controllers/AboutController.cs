@@ -2,6 +2,7 @@
 using DatosGTMNegocio.DTOs;
 using DatosGTMNegocio.Helpers;
 using DatosGTMNegocio.IServices;
+using DatosGTMNegocio.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -105,7 +106,7 @@ namespace DatosGTMWeb.Controllers
             var infoOrdenada = new InformacionPdfOrdenada();
             try
             {
-                var texto = Helper.ReadFile(this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_files + "structuredData.json");
+                var texto = Helper.ReadFile(this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesToRead + "structuredData.json");
                 if(!string.IsNullOrEmpty(texto))
                 {
                    infoPdf = JsonConvert.DeserializeObject<ExtractPdfInfoModel>(texto);
@@ -124,10 +125,33 @@ namespace DatosGTMWeb.Controllers
 
 
 
-            respuesta.Mensaje = "Datos Obtenidos correctamente;
+            respuesta.Mensaje = "Datos Obtenidos correctamente";
             respuesta.Estado = true;
             return Json(respuesta);
         }
+
+
+        [HttpPost]
+        public IActionResult ExtraerInfo()
+        {
+            var respuesta = new ParametrosModel ();
+            try
+            {
+                var nameFile = "Agentes30.pdf";
+                var pathCredenciales = this._webHostEnvironment.ContentRootPath + AdobePdfApi .file_credentials ;
+                var pathReadFile = this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesToWrite + nameFile;
+                var pathFileSave= this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesExtract;
+                respuesta = AdobeExtractInfo.ExtractInfo(pathCredenciales, pathReadFile, pathFileSave);
+            }
+            catch (Exception ex)
+            {
+                respuesta.Mensaje = ex.Message;
+                return Json(respuesta);
+            }
+
+            return Json(respuesta);
+        }
+
 
 
     }
