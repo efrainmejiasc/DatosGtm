@@ -22,7 +22,9 @@ namespace DatosGTMNegocio.Helpers
         public static string urlAudience{ get; set; }
         public static string certificado{ get; set; }
         public static string certificado_key_filetext { get; set; }
-        public static string pdf_files { get; set; }
+        public static string pdf_filesToRead { get; set; }
+        public static string pdf_filesToWrite{ get; set; }
+        public static string pdf_filesExtract{ get; set; }
 
     }
 }

@@ -8,6 +8,7 @@
 <script>
     var urlRequest = '@Url.Action("Request","About")';
     var urlUploadFile = '@Url.Action("UploadFileMethod","About")';
+    var urlLeerArchivo = '@Url.Action("LeerArchivo","About")';
 </script>
 
 <div class="card" style="margin-top:5%;">
@@ -24,6 +25,10 @@
                         <input id="theFile" name="theFile" type="file" size="1" class="btn btn-light" /><br />
                         <input type="button" onclick="UploadFileMethod();" class="btn btn-primary" value="Subir Archivo" />
                     </div>
+                </div>
+                <br /><br />
+                <div>
+                <input type="button" onclick="LeerArchivo();" class="btn btn-primary" value="Leer Archivo" />
                 </div>
       </div>
    </div>

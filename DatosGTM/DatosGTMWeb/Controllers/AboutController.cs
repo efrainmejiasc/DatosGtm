@@ -1,9 +1,12 @@
 ﻿using DatosGTMlWeb.Models;
+using DatosGTMNegocio.DTOs;
 using DatosGTMNegocio.Helpers;
 using DatosGTMNegocio.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
+using System.Runtime.CompilerServices;
 
 namespace DatosGTMWeb.Controllers
 {
@@ -29,7 +32,7 @@ namespace DatosGTMWeb.Controllers
         public async Task<IActionResult> RequestAsync()
         {
             var respuesta = new RespuestaModel();
-            respuesta.Estado = false;
+
             try
             {
                 AdobePdfApi .certificado_key_filetext = Helper.GetKeyCertificado(this._webHostEnvironment.WebRootPath + AdobePdfApi.certificado );
@@ -40,6 +43,7 @@ namespace DatosGTMWeb.Controllers
             catch (Exception ex)
             {
                 respuesta.Mensaje = ex.Message;
+                respuesta.Estado = false;
             }
 
             return Json(respuesta);
@@ -49,7 +53,7 @@ namespace DatosGTMWeb.Controllers
         [HttpPost]
         //[AllowAnonymous]
         //[Route("api/UploadFileMethod")]
-        public RespuestaModel UploadFileMethod(IFormFile file)
+        public IActionResult UploadFileMethod(IFormFile file)
         {
             var respuesta = new RespuestaModel();
             respuesta.Estado = false;
@@ -62,7 +66,7 @@ namespace DatosGTMWeb.Controllers
                     name = name.Replace(":", "");
                     if (file.FileName.ToUpper().Contains(".PDF"))
                     {
-                        string path = this._webHostEnvironment.WebRootPath+ AdobePdfApi.pdf_files + name;
+                        string path = this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesToWrite + name;
                         var stream = System.IO.File.Create(path);
                         file.CopyTo(stream);
                         stream.Dispose();
@@ -70,14 +74,14 @@ namespace DatosGTMWeb.Controllers
                     else
                     {
                         respuesta.Mensaje  = "El archivo debe ser de de extencion .pdf";
-                        return respuesta;
+                        return Json(respuesta);
                     }
 
                 }
                 catch (Exception ex)
                 {
                     respuesta.Mensaje = ex.Message;
-                    return respuesta;
+                    return Json(respuesta);
                 }
             }
             else
@@ -87,8 +91,44 @@ namespace DatosGTMWeb.Controllers
 
             respuesta.Mensaje = "Archivo cargado correctamente";
             respuesta.Estado = true;
-            return respuesta;
+            return Json(respuesta);
         }
+
+
+        [HttpPost]
+        public IActionResult LeerArchivo()
+        {
+            var respuesta = new RespuestaModel();
+            respuesta.Estado = false;
+            var infoPdf = new ExtractPdfInfoModel();
+            var elements = new List<Element>();
+            var infoOrdenada = new InformacionPdfOrdenada();
+            try
+            {
+                var texto = Helper.ReadFile(this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_files + "structuredData.json");
+                if(!string.IsNullOrEmpty(texto))
+                {
+                   infoPdf = JsonConvert.DeserializeObject<ExtractPdfInfoModel>(texto);
+                   elements = infoPdf.elements.Where(x => x.Text != null &&( x.Text.Trim() != "No." && x.Text.Trim() != "NIT" && x.Text.Trim() != "NOMBRE" && x.Text.Trim() != "FECHA INICIO" && !x.Text.Contains ("LISTADO DE AGENTES DE RETENCIÓN DEL IVA"))).ToList();
+                   infoOrdenada.Nombre = elements.Where(x => x.Path.Substring (x.Path.Length - 4 ,4).Trim() == "TD/P").Select(x => x.Text).ToList();
+                   infoOrdenada.Nit = elements.Where(x => x.Path.Substring(x.Path.Length - 7, 7).Trim() == "TD[2]/P").Select(x => x.Text).ToList();
+                   infoOrdenada.Nombre = elements.Where(x => x.Path.Substring(x.Path.Length - 7, 7).Trim() == "TD[3]/P").Select(x => x.Text.Replace("\"","")).ToList();
+                   infoOrdenada.FechaInicio  = elements.Where(x => x.Path.Substring(x.Path.Length - 7, 7).Trim() == "TD[4]/P").Select(x => x.Text).ToList(); 
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta.Mensaje = ex.Message;
+                return Json(respuesta);
+            }
+
+
+
+            respuesta.Mensaje = "Datos Obtenidos correctamente;
+            respuesta.Estado = true;
+            return Json(respuesta);
+        }
+
 
     }
 }

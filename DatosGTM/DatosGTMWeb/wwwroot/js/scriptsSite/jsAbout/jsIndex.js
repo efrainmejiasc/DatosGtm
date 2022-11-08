@@ -58,3 +58,21 @@ function UploadFileMethod() {
         }
     );
 }
+
+
+function LeerArchivo() {
+ 
+    $.ajax(
+        {
+            url: urlLeerArchivo,
+            type: "POST",
+            success: function (data) {
+                if (data.estado) {
+                    toastr.success(data.mensaje);
+                }
+                else
+                    toastr.error(data.mensaje)
+            }
+        }
+    );
+}
