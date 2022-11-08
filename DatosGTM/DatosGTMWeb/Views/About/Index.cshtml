@@ -7,22 +7,24 @@
 }
 <script>
     var urlRequest = '@Url.Action("Request","About")';
+    var urlUploadFile = '@Url.Action("UploadFileMethod","About")';
 </script>
 
 <div class="card" style="margin-top:5%;">
     <div class="card-body">
-        <div class="form-horizontal" style="color:dD8CDCA">
+        <div class="form-horizontal" style="color:#dD8CDCA">
            <div>
               <input type="button" id="btnGetBearerValue" onclick="Request()" class="btn btn-primary" value="EJECUTAR REQUEST"/>
-           </div><br><br>
-           <div>
-                    <div class="col col-4">
-        <br /><br /><br />
-        <label style="font-size:12px;font-style:italic;color:white;"> Imagen de perfil </label><br />
-        <input type="file" #file placeholder="Choose file" (change)="uploadFile(file.files)" style="display:none;">
-        <button type="button" class="btn btn-light" (click)="file.click()" style="width:auto"> Seleccionar</button>
-      </div>
-               </div>
+           </div>
+           <br><br>
+
+                <div class="buttons">
+                    <div class="upload-button">
+                        <div class="label">Subir PDF</div>
+                        <input id="theFile" name="theFile" type="file" size="1" class="btn btn-light" /><br />
+                        <input type="button" onclick="UploadFileMethod();" class="btn btn-primary" value="Subir Archivo" />
+                    </div>
+                </div>
       </div>
    </div>
 </div>

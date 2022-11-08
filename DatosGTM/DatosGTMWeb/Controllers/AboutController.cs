@@ -58,7 +58,8 @@ namespace DatosGTMWeb.Controllers
                 try
                 {
                     var p = file.FileName.Replace("_", "").Replace("/", "").Split('.');
-                    var name = p[0] + "_" + DateTime.Now.ToString().Replace("/","") + DateTime.Now.Millisecond  + ".pdf";
+                    var name = p[0] + "_" + DateTime.Now.ToString().Replace("/","") + DateTime.Now.Millisecond  + ".pdf".Replace(" ", "");
+                    name = name.Replace(":", "");
                     if (file.FileName.ToUpper().Contains(".PDF"))
                     {
                         string path = this._webHostEnvironment.WebRootPath+ AdobePdfApi.pdf_files + name;
@@ -76,6 +77,7 @@ namespace DatosGTMWeb.Controllers
                 catch (Exception ex)
                 {
                     respuesta.Mensaje = ex.Message;
+                    return respuesta;
                 }
             }
             else
@@ -84,6 +86,7 @@ namespace DatosGTMWeb.Controllers
             }
 
             respuesta.Mensaje = "Archivo cargado correctamente";
+            respuesta.Estado = true;
             return respuesta;
         }
 
