@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
+using System.IO.Compression;
 using System.Runtime.CompilerServices;
 
 namespace DatosGTMWeb.Controllers
@@ -141,7 +142,13 @@ namespace DatosGTMWeb.Controllers
                 var pathCredenciales = this._webHostEnvironment.ContentRootPath + AdobePdfApi .file_credentials ;
                 var pathReadFile = this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesToWrite + nameFile;
                 var pathFileSave= this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesExtract;
+                var pathReadJson = this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesToRead;
                 respuesta = AdobeExtractInfo.ExtractInfo(pathCredenciales, pathReadFile, pathFileSave);
+                if (respuesta .Estado)
+                {
+                    ZipFile.ExtractToDirectory(respuesta.PathArchivo , pathReadJson,true);
+
+                }
             }
             catch (Exception ex)
             {
