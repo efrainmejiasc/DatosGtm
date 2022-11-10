@@ -30,10 +30,15 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 builder.Services.AddMvc();
+#if DEBUG
 builder.Services.AddDbContext<MyAppContext>(
     op => op.UseSqlServer(@"Server=EMCSERVERHP\SQLEXPRESS;DataBase=DatosGTM;User Id=sa;Password=1234santiago;MultipleActiveResultSets=false;Connection Timeout=120;TrustServerCertificate=True;",
     b => b.MigrationsAssembly("DatosGTMModelo")));
-
+#else 
+builder.Services.AddDbContext<MyAppContext>(
+    op => op.UseSqlServer(@"Server=SQL5101.site4now.net;DataBase=db_a8f8a1_datosgtm;User Id=db_a8f8a1_datosgtm_admin;Password=1234santiago;MultipleActiveResultSets=false;Connection Timeout=120;TrustServerCertificate=True;",
+    b => b.MigrationsAssembly("DatosGTMModelo")));
+#endif
 
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<MyAppContext, MyAppContext>();
