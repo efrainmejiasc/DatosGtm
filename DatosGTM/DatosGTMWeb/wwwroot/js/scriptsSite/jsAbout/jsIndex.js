@@ -56,7 +56,7 @@ function UploadFileMethod() {
                     console.log(data.tercero);
                     toastr.success(data.mensaje);
                     $('#theFile').val('');
-
+                    $('#tablaTercero tbody tr').remove();
                     $.each(data.tercero, function (index, item) {
                         let tr = `<tr>
                       <td> ${item.numero} </td>
@@ -70,7 +70,7 @@ function UploadFileMethod() {
                     $('#loading').hide();
                 }
                 else {
-                    $('#tablaTercero tbody tr').remove();
+                    //$('#tablaTercero tbody tr').remove();
                     toastr.error(data.mensaje);
                     $('#loading').hide();
                 }
@@ -157,7 +157,7 @@ function GetTerceros() {
             type: "GET",
             success: function (data) {
                 if (data != null) {
-
+                    $('#tablaTercero tbody tr').remove();
                     console.log(data);
                     $.each(data, function (index, item) {
                         let tr = `<tr>
