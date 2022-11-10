@@ -44,5 +44,6 @@ namespace DatosGTMModelo.DataModel
 
         public virtual DbSet<Usuario> Usuario { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
+        public virtual DbSet<Tercero> Tercero { get; set; }
     }
 }

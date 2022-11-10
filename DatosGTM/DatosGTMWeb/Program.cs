@@ -39,7 +39,10 @@ builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<MyAppContext, MyAppContext>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<ITerceroRepository, TerceroRepository>();
+builder.Services.AddScoped<ITerceroService, TerceroService>();
 builder.Services.AddScoped<IRequestService, RequestService>();
+builder.Services.AddScoped<IReadFileService, ReadFileService>();
 
 AdobePdfApi.urlAdobePdfApiJwt = builder.Configuration["ADOBE_PDF_API:urlAdobePdfApiJwt"];
 AdobePdfApi.urlAdobePdfApiAutorizacion = builder.Configuration["ADOBE_PDF_API:urlAdobePdfApiAutorizacion"];

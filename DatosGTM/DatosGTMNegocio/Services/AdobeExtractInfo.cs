@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using DatosGTMNegocio.DTOs;
+using DatosGTMModelo.DataModel;
 
 namespace DatosGTMNegocio.Services
 {
@@ -22,7 +23,7 @@ namespace DatosGTMNegocio.Services
         private static readonly ILog log = LogManager.GetLogger(typeof(AdobeExtractInfo));
         public static ParametrosModel ExtractInfo (string pathCredenciales, string pathReadFile, string pathFileSave)
         {
-            var respuesta = new ParametrosModel();
+            var respuesta = new ParametrosModel ();
             respuesta.Estado = false;
             ConfigureLogging();
             try
@@ -44,13 +45,15 @@ namespace DatosGTMNegocio.Services
                 extractPdfOperation.SetOptions(extractPdfOptions);
 
                 var completeName = (DateTime.Now.ToString().Replace("/", "") + DateTime.Now.Millisecond.ToString().Replace(" ", "")).Replace (":", "") + "_";
-                pathFileSave = (pathFileSave + "pdfResult_" + completeName + ".zip").Replace(" ", "");
+                var nombreArchivo = ("pdfResult_" + completeName + ".zip").Replace(" ", "");
+                pathFileSave = pathFileSave + nombreArchivo;
 
                 FileRef result = extractPdfOperation.Execute(executionContext);
                 result.SaveAs(pathFileSave);
 
                 respuesta.Estado = true;
                 respuesta.PathArchivo= pathFileSave;
+                respuesta.NombreArchivo = nombreArchivo;
                 respuesta.Mensaje = "Transaccion Exitosa";
             }
             catch (ServiceUsageException ex)
