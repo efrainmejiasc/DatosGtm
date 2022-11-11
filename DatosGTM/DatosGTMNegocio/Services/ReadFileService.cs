@@ -22,7 +22,7 @@ namespace DatosGTMNegocio.Services
             this._terceroRepository = terceroRepository;
         }
 
-        public List<Tercero>  LeerArchivo(string path)
+        public List<Tercero>  LeerArchivo(string path, string identificador)
         {
             var infoPdf = new ExtractPdfInfoModel();
             var elements = new List<Element>();
@@ -31,7 +31,6 @@ namespace DatosGTMNegocio.Services
             var tercero = new Tercero();
             var texto = Helper.ReadFile(path);
             var fecha = DateTime.Now;
-            var identificador = Helper.CreateUniqueidentifier();
 
             if (!string.IsNullOrEmpty(texto))
             {

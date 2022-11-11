@@ -9,6 +9,6 @@ namespace DatosGTMNegocio.IServices
 {
     public interface IReadFileService
     {
-        List<Tercero> LeerArchivo(string path);
+        List<Tercero> LeerArchivo(string path, string identificador);
     }
 }

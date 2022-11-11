@@ -41,6 +41,24 @@ namespace DatosGTMNegocio.Helpers
             return File.ReadAllText(path);
         }
 
+        public static bool CreateDirectory (string path)
+        {
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+                return true;
+            }
+
+            return false;
+        }
+
+        public static void CreateFolder(string rootPath,string identificador)
+        {
+            CreateDirectory (rootPath + AdobePdfApi.pdf_filesToWrite + "F_" + identificador);
+            CreateDirectory(rootPath + AdobePdfApi.pdf_filesExtract + "F_" + identificador);
+            CreateDirectory(rootPath + AdobePdfApi.pdf_filesToRead + "F_" + identificador);
+        }
+
         public static string GetKeyCertificado(string path)
         {
             Dictionary<object, object> test = new Dictionary<object, object>();

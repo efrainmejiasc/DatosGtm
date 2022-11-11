@@ -4,26 +4,6 @@
     GetTerceros();
 });
 
-function Request() {
-
-    $.ajax({
-        type: "GET",
-        url: urlRequest,
-        datatype: "json",
-        success: function (data) {
-            console.log(data);
-            if (data.estado) {
-                toastr.success(data.mensaje)
-            }
-            else
-                toastr.warning(data.mensaje);
-        }
-    });
-
-    return false;
-}
-
-    
 function UploadFileMethod() {
     var input = document.getElementById('theFile');
     var files = input.files;
@@ -51,7 +31,8 @@ function UploadFileMethod() {
             processData: false,
             contentType: false,
             type: "POST",
-            success: function (data) {
+            success: function (data)
+            {
                 if (data.estado) {
                     console.log(data.tercero);
                     toastr.success(data.mensaje);
@@ -70,10 +51,51 @@ function UploadFileMethod() {
                     $('#loading').hide();
                 }
                 else {
-                    //$('#tablaTercero tbody tr').remove();
                     toastr.error(data.mensaje);
                     $('#loading').hide();
                 }
+            }, error: function (jqXHR, textStatus, errorThrown) {
+                $('#tablaTercero tbody tr').remove();
+            }
+        }
+    );
+
+    return false;
+}
+
+
+function GetTerceros() {
+
+    $('#loading').show();
+
+    $.ajax(
+        {
+            url: urlGetTerceros,
+            type: "GET",
+            success: function (data)
+            {
+                if (data != null) {
+                    $('#tablaTercero tbody tr').remove();
+                    console.log(data);
+                    $.each(data, function (index, item) {
+                        let tr = `<tr>
+                      <td> ${item.numero} </td>
+                      <td> ${item.nit} </td>
+                      <td> ${item.nombre} </td>
+                      <td> ${item.fechaInicio} </td>
+                      </tr>`;
+                        $('#tablaTercero tbody').append(tr);
+                    });
+                    setTimeout(InicializarDataTable, 1000);
+                    $('#loading').hide();
+                }
+                else {
+                    $('#tablaTercero tbody tr').remove();
+                    toastr.error(data.mensaje);
+                    $('#loading').hide();
+                }
+            }, error: function (jqXHR, textStatus, errorThrown) {
+                $('#tablaTercero tbody tr').remove();
             }
         }
     );
@@ -83,7 +105,7 @@ function UploadFileMethod() {
 
 function InicializarDataTable() {
     var init = $('#initDataTable').val();
-
+   // $.noConflict();
     try {
         if (init === 'no') {
             $('#tablaTercero').DataTable({
@@ -105,14 +127,17 @@ function InicializarDataTable() {
                 pagingType: "simple"
             });
         }
-    } catch { console.log(''); }
-
-    $("#tablaTercero").addClass("display compact dt-center");
+        $("#tablaTercero").addClass("display compact dt-center"); }
+    catch { console.log(''); }
 }
 
 
+
+
+/////////////LIMPIAR PARA PRODUCCION
+
 function LeerArchivo() {
- 
+
     $.ajax(
         {
             url: urlLeerArchivo,
@@ -147,38 +172,21 @@ function ExtraerInfo() {
 }
 
 
-function GetTerceros() {
+function Request() {
 
-    $('#loading').show();
-
-    $.ajax(
-        {
-            url: urlGetTerceros,
-            type: "GET",
-            success: function (data) {
-                if (data != null) {
-                    $('#tablaTercero tbody tr').remove();
-                    console.log(data);
-                    $.each(data, function (index, item) {
-                        let tr = `<tr>
-                      <td> ${item.numero} </td>
-                      <td> ${item.nit} </td>
-                      <td> ${item.nombre} </td>
-                      <td> ${item.fechaInicio} </td>
-                      </tr>`;
-                        $('#tablaTercero tbody').append(tr);
-                    });
-                    setTimeout(InicializarDataTable, 1000);
-                    $('#loading').hide();
-                }
-                else {
-                    $('#tablaTercero tbody tr').remove();
-                    toastr.error(data.mensaje);
-                    $('#loading').hide();
-                }
+    $.ajax({
+        type: "GET",
+        url: urlRequest,
+        datatype: "json",
+        success: function (data) {
+            console.log(data);
+            if (data.estado) {
+                toastr.success(data.mensaje)
             }
+            else
+                toastr.warning(data.mensaje);
         }
-    );
+    });
 
     return false;
 }

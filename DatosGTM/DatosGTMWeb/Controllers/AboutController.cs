@@ -7,6 +7,8 @@ using DatosGTMNegocio.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using PdfSharpCore.Pdf.IO;
+using PdfSharpCore.Pdf;
 using Polly;
 using System;
 using System.IO.Compression;
@@ -51,29 +53,62 @@ namespace DatosGTMWeb.Controllers
             {
                 try
                 {
-                    var p = file.FileName.Replace("_", "").Replace("/", "").Split('.');
-                    var name = p[0] + "_" + DateTime.Now.ToString().Replace("/","") + DateTime.Now.Millisecond  + ".pdf".Replace(" ", "");
-                    name = name.Replace(":", "").Replace (" ","");
+                    var p = file.FileName.Replace("_", "").Replace("/", "").Replace(" ", "").Replace("-", "").Split('.');
+                    var identificador = Helper.CreateUniqueidentifier().ToString().ToUpper();
+                    var name = p[0] + "_" + identificador + "_.pdf".Replace(" ", "");
                     if (file.FileName.ToUpper().Contains(".PDF"))
                     {
-                        var pathReadFile = this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesToWrite + name;
+                        Helper.CreateFolder(this._webHostEnvironment.WebRootPath, identificador);
+                        var pathReadFile = this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesToWrite + "F_" + identificador + "\\" + name;
                         var stream = System.IO.File.Create(pathReadFile);
                         file.CopyTo(stream);
                         stream.Dispose();
+                        
+                        PdfDocument filePdf = PdfReader.Open(pathReadFile, PdfDocumentOpenMode.InformationOnly );
+                        var numberPages = filePdf.PageCount;
+                        filePdf.Dispose();
 
                         var pathCredenciales = this._webHostEnvironment.ContentRootPath + AdobePdfApi.file_credentials;
-                        var pathFileSave = this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesExtract;
-                        var pathReadJson = this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesToRead;
-                        respuesta= AdobeExtractInfo.ExtractInfo(pathCredenciales, pathReadFile, pathFileSave);
-                        if (respuesta.Estado)
+                        var pathFileSave = this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesExtract + "F_" + identificador + "\\";
+                        var pathReadJson = this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesToRead + "F_" + identificador + "\\";
+
+                        if (numberPages > 20)
                         {
-                            ZipFile.ExtractToDirectory(respuesta.PathArchivo, pathReadJson, true);
-                            respuesta.Tercero = this._readFileService.LeerArchivo(pathReadJson + "structuredData.json");
+                            respuesta = AdobeSplitFile.SplitFile(pathCredenciales, pathReadFile, identificador);
+                            if (respuesta.Estado)
+                            {
+                                foreach (var pathFileSave_ in respuesta.PathFile)
+                                {
+                                    respuesta = AdobeExtractInfo.ExtractInfo(pathCredenciales, pathReadFile, pathFileSave_, identificador);
+                                    if (respuesta.Estado)
+                                    {
+                                        ZipFile.ExtractToDirectory(respuesta.PathArchivo, pathReadJson, true);
+                                        respuesta.Tercero.AddRange( this._readFileService.LeerArchivo(pathReadJson + "structuredData.json", identificador));
+                                    }
+                                    else
+                                    {
+                                        return Json(respuesta);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                return Json(respuesta);
+                            }
                         }
                         else
                         {
-                            return Json(respuesta);
-                        }   
+                            respuesta = AdobeExtractInfo.ExtractInfo(pathCredenciales, pathReadFile, pathFileSave, identificador);
+                            if (respuesta.Estado)
+                            {
+                                ZipFile.ExtractToDirectory(respuesta.PathArchivo, pathReadJson, true);
+                                respuesta.Tercero = this._readFileService.LeerArchivo(pathReadJson + "structuredData.json",identificador);
+                            }
+                            else
+                            {
+                                return Json(respuesta);
+                            }
+                        }
                     }
                     else
                     {
@@ -135,7 +170,7 @@ namespace DatosGTMWeb.Controllers
                 var pathReadFile = this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesToWrite + nameFile;
                 var pathFileSave = this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesExtract;
                 var pathReadJson = this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesToRead;
-                respuesta = AdobeExtractInfo.ExtractInfo(pathCredenciales, pathReadFile, pathFileSave);
+                respuesta = AdobeExtractInfo.ExtractInfo(pathCredenciales, pathReadFile, pathFileSave,Helper.CreateUniqueidentifier().ToString().ToUpper());
                 if (respuesta.Estado)
                 {
                     ZipFile.ExtractToDirectory(respuesta.PathArchivo, pathReadJson, true);

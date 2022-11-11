@@ -1,0 +1,1 @@
+En esta carpeta se escribe el .zip que devuelve la API de ADOBE a la solicitud de extraccion de informacion

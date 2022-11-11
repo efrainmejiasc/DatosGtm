@@ -4,6 +4,7 @@ using Adobe.PDFServicesSDK.io;
 using Adobe.PDFServicesSDK.options.extractpdf;
 using Adobe.PDFServicesSDK.pdfops;
 using Adobe.PDFServicesSDK;
+using DatosGTMNegocio.DTOs;
 using log4net.Config;
 using log4net.Repository;
 using log4net;
@@ -13,17 +14,16 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using DatosGTMNegocio.DTOs;
-using DatosGTMModelo.DataModel;
+using DatosGTMNegocio.Helpers;
 
 namespace DatosGTMNegocio.Services
 {
-    public class AdobeExtractInfo
+    public class AdobeSplitFile
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(AdobeExtractInfo));
-        public static ParametrosModel ExtractInfo (string pathCredenciales, string pathReadFile, string pathFileSave,string identificador)
+        public static ParametrosModel SplitFile(string pathCredenciales, string pathReadFile,string identificador)
         {
-            var respuesta = new ParametrosModel ();
+            var respuesta = new ParametrosModel();
             respuesta.Estado = false;
             ConfigureLogging();
             try
@@ -33,26 +33,31 @@ namespace DatosGTMNegocio.Services
                 Credentials credentials = Credentials.ServiceAccountCredentialsBuilder().FromFile(pathCredenciales).Build();
 
                 Adobe.PDFServicesSDK.ExecutionContext executionContext = Adobe.PDFServicesSDK.ExecutionContext.Create(credentials);
-                ExtractPDFOperation extractPdfOperation = ExtractPDFOperation.CreateNew();
+                SplitPDFOperation splitPDFOperation = SplitPDFOperation.CreateNew();
 
                 var pathFromFile = FileRef.CreateFromLocalFile(pathReadFile);
                 FileRef sourceFileRef = pathFromFile;
-                extractPdfOperation.SetInputFile(sourceFileRef);
+                splitPDFOperation.SetInput(sourceFileRef);
 
-                ExtractPDFOptions extractPdfOptions = ExtractPDFOptions.ExtractPDFOptionsBuilder()
-                    .AddElementsToExtract(new List<ExtractElementType>(new[] { ExtractElementType.TEXT, ExtractElementType.TABLES }))
-                    .Build();
-                extractPdfOperation.SetOptions(extractPdfOptions);
+                splitPDFOperation.SetPageCount(20);
 
-                var nombreArchivo = ("pdfResult_" + identificador + "_.zip");
-                pathFileSave = pathFileSave + nombreArchivo;
+                List<FileRef> result = splitPDFOperation.Execute(executionContext);
 
-                FileRef result = extractPdfOperation.Execute(executionContext);
-                result.SaveAs(pathFileSave);
+                var partesPath = pathReadFile.Split("\\");
+                var nombreArchivo = partesPath[partesPath.Length - 1];
+                var pathSaveFile = pathReadFile.Replace(nombreArchivo, "");
+                respuesta.PathFile = new List<string>();
+                int index = 0;
+                var path = string.Empty;     
+                foreach (FileRef fileRef in result)
+                {
+                    path = pathSaveFile + nombreArchivo + "_" + index.ToString() + "_.pdf";
+                    fileRef.SaveAs(path);
+                    respuesta.PathFile.Add(path);
+                    index++;
+                }
 
                 respuesta.Estado = true;
-                respuesta.PathArchivo= pathFileSave;
-                respuesta.NombreArchivo = nombreArchivo;
                 respuesta.Mensaje = "Transaccion Exitosa";
             }
             catch (ServiceUsageException ex)

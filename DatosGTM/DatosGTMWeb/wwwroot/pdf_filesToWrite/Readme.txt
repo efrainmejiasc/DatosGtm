@@ -1,0 +1,1 @@
+En esta carpeta se escriben los PDF originales , (el subido para extraer informacion desde la api de ADOBE) 
