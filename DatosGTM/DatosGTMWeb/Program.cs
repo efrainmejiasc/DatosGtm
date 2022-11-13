@@ -64,7 +64,8 @@ AdobePdfApi.urlAudience = builder.Configuration["ADOBE_PDF_API:urlAudience"];
 AdobePdfApi.pdf_filesToRead = builder.Configuration["ADOBE_PDF_API:pdf_filesToRead"];
 AdobePdfApi.pdf_filesToWrite = builder.Configuration["ADOBE_PDF_API:pdf_filesToWrite"];
 AdobePdfApi.pdf_filesExtract = builder.Configuration["ADOBE_PDF_API:pdf_filesExtract"];
-AdobePdfApi.file_credentials= builder.Configuration["ADOBE_PDF_API:file_credentials"];
+AdobePdfApi.file_credentials = builder.Configuration["ADOBE_PDF_API:file_credentials"];
+AdobePdfApi.log_excepcion = builder.Configuration["ADOBE_PDF_API:log_excepcion"];
 
 var app = builder.Build();
 

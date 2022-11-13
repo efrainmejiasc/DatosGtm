@@ -26,6 +26,7 @@ namespace DatosGTMNegocio.Helpers
         public static string pdf_filesToWrite{ get; set; }
         public static string pdf_filesExtract{ get; set; }
         public static string file_credentials { get; set; }
+        public static string log_excepcion { get; set; }
 
     }
 }

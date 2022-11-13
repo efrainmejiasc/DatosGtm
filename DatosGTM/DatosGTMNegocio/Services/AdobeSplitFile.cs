@@ -21,37 +21,33 @@ namespace DatosGTMNegocio.Services
     public class AdobeSplitFile
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(AdobeExtractInfo));
-        public static ParametrosModel SplitFile(string pathCredenciales, string pathReadFile,string identificador)
+        public static ParametrosModel SplitFile(string pathCredenciales, string pathReadFile, string identificador, string logPath)
         {
             var respuesta = new ParametrosModel();
             respuesta.Estado = false;
+            var partesPath = pathReadFile.Split("\\");
             ConfigureLogging();
+
             try
             {
                 ClientConfig clientConfig = ClientConfig.ConfigBuilder().FromFile(pathCredenciales).Build();
-
                 Credentials credentials = Credentials.ServiceAccountCredentialsBuilder().FromFile(pathCredenciales).Build();
-
                 Adobe.PDFServicesSDK.ExecutionContext executionContext = Adobe.PDFServicesSDK.ExecutionContext.Create(credentials);
                 SplitPDFOperation splitPDFOperation = SplitPDFOperation.CreateNew();
-
                 var pathFromFile = FileRef.CreateFromLocalFile(pathReadFile);
                 FileRef sourceFileRef = pathFromFile;
                 splitPDFOperation.SetInput(sourceFileRef);
-
                 splitPDFOperation.SetPageCount(20);
-
                 List<FileRef> result = splitPDFOperation.Execute(executionContext);
 
-                var partesPath = pathReadFile.Split("\\");
                 var nombreArchivo = partesPath[partesPath.Length - 1];
                 var pathSaveFile = pathReadFile.Replace(nombreArchivo, "");
                 respuesta.PathFile = new List<string>();
                 int index = 0;
-                var path = string.Empty;     
+                var path = string.Empty;
                 foreach (FileRef fileRef in result)
                 {
-                    path = pathSaveFile + nombreArchivo + "_" + index.ToString() + "_.pdf";
+                    path = pathSaveFile + nombreArchivo.Replace("_.pdf", "") + "_" + index.ToString() + "_.pdf";
                     fileRef.SaveAs(path);
                     respuesta.PathFile.Add(path);
                     index++;
@@ -62,31 +58,31 @@ namespace DatosGTMNegocio.Services
             }
             catch (ServiceUsageException ex)
             {
-                log.Error("Exception encountered while executing operation", ex);
+                Helper.WriteFileLog(logPath, ex.ToString());
                 respuesta.Mensaje = ex.Message;
                 return respuesta;
             }
             catch (ServiceApiException ex)
             {
-                log.Error("Exception encountered while executing operation", ex);
+                Helper.WriteFileLog(logPath, ex.ToString());
                 respuesta.Mensaje = ex.Message;
                 return respuesta;
             }
             catch (SDKException ex)
             {
-                log.Error("Exception encountered while executing operation", ex);
+                Helper.WriteFileLog(logPath, ex.ToString());
                 respuesta.Mensaje = ex.Message;
                 return respuesta;
             }
             catch (IOException ex)
             {
-                log.Error("Exception encountered while executing operation", ex);
+                Helper.WriteFileLog(logPath, ex.ToString());
                 respuesta.Mensaje = ex.Message;
                 return respuesta;
             }
             catch (Exception ex)
             {
-                log.Error("Exception encountered while executing operation", ex);
+                Helper.WriteFileLog(logPath, ex.ToString());
                 respuesta.Mensaje = ex.Message;
                 return respuesta;
             }

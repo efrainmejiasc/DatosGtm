@@ -24,6 +24,7 @@ namespace DatosGTMWeb.Controllers
         private readonly IReadFileService _readFileService;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ITerceroService  _terceroService;
+        private Usuario usuario ;
 
         public AboutController(ILogger<HomeController> logger, IHttpContextAccessor httpContext, IRequestService requestService, 
             IWebHostEnvironment webHostEnvironment, IReadFileService readFileService, ITerceroService terceroService)
@@ -34,6 +35,11 @@ namespace DatosGTMWeb.Controllers
             this._readFileService = readFileService;
             this._webHostEnvironment = webHostEnvironment;
             this._terceroService = terceroService;
+
+            if (!string.IsNullOrEmpty(_httpContext.HttpContext.Session.GetString("UsuarioLogin")))
+                this.usuario = JsonConvert.DeserializeObject<Usuario>(_httpContext.HttpContext.Session.GetString("UsuarioLogin"));
+
+                
         }
         public IActionResult Index()
         {
@@ -49,17 +55,21 @@ namespace DatosGTMWeb.Controllers
         {
             var respuesta = new ParametrosModel();
             respuesta.Estado = false;
+            var logPath = this._webHostEnvironment.WebRootPath + AdobePdfApi.log_excepcion;
+
             if (file != null)
             {
                 try
                 {
                     var p = file.FileName.Replace("_", "").Replace("/", "").Replace(" ", "").Replace("-", "").Split('.');
-                    var identificador = Helper.CreateUniqueidentifier().ToString().ToUpper();
-                    var name = p[0] + "_" + identificador + "_.pdf".Replace(" ", "");
+                    var identificador = Helper.CreateUniqueidentifier();
+                    var strIdentificador = identificador.ToString().ToUpper();
+                    var name = p[0] + "_" + strIdentificador + "_.pdf".Replace(" ", "");
+
                     if (file.FileName.ToUpper().Contains(".PDF"))
                     {
-                        Helper.CreateFolder(this._webHostEnvironment.WebRootPath, identificador);
-                        var pathReadFile = this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesToWrite + "F_" + identificador + "\\" + name;
+                        Helper.CreateFolder(this._webHostEnvironment.WebRootPath, strIdentificador);
+                        var pathReadFile = this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesToWrite + "F_" + strIdentificador + "\\" + name;
                         var stream = System.IO.File.Create(pathReadFile);
                         file.CopyTo(stream);
                         stream.Dispose();
@@ -69,27 +79,35 @@ namespace DatosGTMWeb.Controllers
                         filePdf.Dispose();
 
                         var pathCredenciales = this._webHostEnvironment.ContentRootPath + AdobePdfApi.file_credentials;
-                        var pathFileSave = this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesExtract + "F_" + identificador + "\\";
-                        var pathReadJson = this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesToRead + "F_" + identificador + "\\";
-
+                        var pathFileSave = this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesExtract + "F_" + strIdentificador + "\\";
+                        var pathReadJson = this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesToRead + "F_" + strIdentificador + "\\";
+                        
                         if (numberPages > 20)
                         {
-                            respuesta = AdobeSplitFile.SplitFile(pathCredenciales, pathReadFile, identificador);
+                            respuesta = AdobeSplitFile.SplitFile(pathCredenciales, pathReadFile, strIdentificador,logPath);
                             if (respuesta.Estado)
                             {
-                                foreach (var pathFileSave_ in respuesta.PathFile)
+                                var acumuladorTercero  = new List<Tercero>();
+                                int indice = 0;
+                                foreach (var pathReadFile_ in respuesta.PathFile)
                                 {
-                                    respuesta = AdobeExtractInfo.ExtractInfo(pathCredenciales, pathReadFile, pathFileSave_, identificador);
+                                    respuesta = AdobeExtractInfo.ExtractInfo(pathCredenciales, pathReadFile_, pathFileSave, strIdentificador,logPath, indice.ToString ());
                                     if (respuesta.Estado)
                                     {
                                         ZipFile.ExtractToDirectory(respuesta.PathArchivo, pathReadJson, true);
-                                        respuesta.Tercero.AddRange( this._readFileService.LeerArchivo(pathReadJson + "structuredData.json", identificador));
+                                        var t = this._readFileService.LeerArchivo(pathReadJson + "structuredData.json", identificador);
+                                        if (t.Count > 0)
+                                            acumuladorTercero.AddRange(t);
+
+                                        indice++;
                                     }
                                     else
                                     {
                                         return Json(respuesta);
                                     }
                                 }
+                                respuesta.Tercero = new List<Tercero>();
+                                respuesta.Tercero = acumuladorTercero;
                             }
                             else
                             {
@@ -98,7 +116,7 @@ namespace DatosGTMWeb.Controllers
                         }
                         else
                         {
-                            respuesta = AdobeExtractInfo.ExtractInfo(pathCredenciales, pathReadFile, pathFileSave, identificador);
+                            respuesta = AdobeExtractInfo.ExtractInfo(pathCredenciales, pathReadFile, pathFileSave, strIdentificador, logPath);
                             if (respuesta.Estado)
                             {
                                 ZipFile.ExtractToDirectory(respuesta.PathArchivo, pathReadJson, true);
@@ -119,6 +137,7 @@ namespace DatosGTMWeb.Controllers
                 }
                 catch (Exception ex)
                 {
+                    Helper.WriteFileLog(logPath, ex.ToString());
                     respuesta.Mensaje = ex.Message;
                     return Json(respuesta);
                 }
@@ -165,12 +184,14 @@ namespace DatosGTMWeb.Controllers
             var respuesta = new ParametrosModel();
             try
             {
+                var logPath = this._webHostEnvironment + AdobePdfApi.log_excepcion;
+
                 var nameFile = "Agentes30.pdf";
                 var pathCredenciales = this._webHostEnvironment.ContentRootPath + AdobePdfApi.file_credentials;
                 var pathReadFile = this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesToWrite + nameFile;
                 var pathFileSave = this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesExtract;
                 var pathReadJson = this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesToRead;
-                respuesta = AdobeExtractInfo.ExtractInfo(pathCredenciales, pathReadFile, pathFileSave,Helper.CreateUniqueidentifier().ToString().ToUpper());
+                respuesta = AdobeExtractInfo.ExtractInfo(pathCredenciales, pathReadFile, pathFileSave,Helper.CreateUniqueidentifier().ToString().ToUpper(), logPath);
                 if (respuesta.Estado)
                 {
                     ZipFile.ExtractToDirectory(respuesta.PathArchivo, pathReadJson, true);

@@ -59,6 +59,20 @@ namespace DatosGTMNegocio.Helpers
             CreateDirectory(rootPath + AdobePdfApi.pdf_filesToRead + "F_" + identificador);
         }
 
+        public static bool WriteFileLog( string logPath, string excepcion)
+        {
+            var resultado = false;
+            var strLog = "FECHA: " + DateTime.Now.ToString()+ " EXCEPCION: " + excepcion  + Environment.NewLine;
+
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(logPath, true))
+            {
+                file.WriteLine(strLog);
+                resultado = true;
+            }
+
+            return resultado;
+        }
+
         public static string GetKeyCertificado(string path)
         {
             Dictionary<object, object> test = new Dictionary<object, object>();

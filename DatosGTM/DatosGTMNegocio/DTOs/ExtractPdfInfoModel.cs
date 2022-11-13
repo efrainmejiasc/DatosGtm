@@ -10,10 +10,10 @@ namespace DatosGTMNegocio.DTOs
 {
     public class ExtractPdfInfoModel
     {
-        public Version version { get; set; }
-        public ExtendedMetadata extended_metadata { get; set; }
+      //  public Version version { get; set; }
+     //   public ExtendedMetadata extended_metadata { get; set; }
         public List<Element> elements { get; set; }
-        public List<Page> pages { get; set; }
+       // public List<Page> pages { get; set; }
     }
     public class Attributes
     {
@@ -44,17 +44,17 @@ namespace DatosGTMNegocio.DTOs
 
     public class Element
     {
-        public List<double> Bounds { get; set; }
-        public List<double> ClipBounds { get; set; }
-        public int Page { get; set; }
+        // public List<double> Bounds { get; set; }
+        // public List<double> ClipBounds { get; set; }
+        // public int Page { get; set; }
+        // public Attributes attributes { get; set; }
+        // public Font Font { get; set; }
+        // public bool? HasClip { get; set; }
+        // public string Lang { get; set; }
+        // public double? TextSize { get; set; }
+        //public List<string> filePaths { get; set; }
         public string Path { get; set; }
-        public Attributes attributes { get; set; }
-        public Font Font { get; set; }
-        public bool? HasClip { get; set; }
-        public string Lang { get; set; }
         public string Text { get; set; }
-        public double? TextSize { get; set; }
-        public List<string> filePaths { get; set; }
     }
 
     public class ExtendedMetadata

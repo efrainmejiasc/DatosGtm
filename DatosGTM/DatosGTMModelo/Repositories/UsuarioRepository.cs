@@ -18,7 +18,14 @@ namespace DatosGTMModelo.Repositories
         }
         public Usuario GetUserData( string userMail, string password)
         {
-            return db.Usuario.Where(x => (x.Password == password || x.Password2 == password) && (x.Email == userMail || x.UserName == userMail) && x.Estado).FirstOrDefault();
+            var usuario = db.Usuario.Where(x => (x.Password == password || x.Password2 == password) 
+                                             && (x.Email == userMail || x.UserName == userMail) && x.Estado).FirstOrDefault();
+            if(usuario != null)
+            {
+                usuario.Password = string.Empty;
+                usuario.Password2 = string.Empty;
+            }
+            return usuario;
         }
 
     }

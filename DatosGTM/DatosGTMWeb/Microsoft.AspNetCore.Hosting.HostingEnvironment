@@ -1,0 +1,17 @@
+FECHA: 12/11/2022 12:59:31 EXCEPCION: Adobe.PDFServicesSDK.exception.SDKException: Error while reading the config file C:\Users\EfrainMejiasC\Documents\GitHub\DatosGtm\DatosGTM\DatosGTMWeb\
+ ---> System.IO.DirectoryNotFoundException: Could not find a part of the path 'C:\Users\EfrainMejiasC\Documents\GitHub\DatosGtm\DatosGTM\DatosGTMWeb\'.
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategy(FileStream fileStream, String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, Int64 preallocationSize)
+   at System.IO.StreamReader.ValidateArgsAndOpenPath(String path, Encoding encoding, Int32 bufferSize)
+   at System.IO.File.InternalReadAllText(String path, Encoding encoding)
+   at System.IO.File.ReadAllText(String path)
+   at Adobe.PDFServicesSDK.core.util.JsonUtil.GetTokenFromFile(String configFilePath)
+   --- End of inner exception stack trace ---
+   at Adobe.PDFServicesSDK.core.util.JsonUtil.GetTokenFromFile(String configFilePath)
+   at Adobe.PDFServicesSDK.ClientConfig.Builder.FromFile(String clientConfigFilePath)
+   at DatosGTMNegocio.Services.AdobeSplitFile.SplitFile(String pathCredenciales, String pathReadFile, String identificador, String logPath) in C:\Users\EfrainMejiasC\Documents\GitHub\DatosGtm\DatosGTM\DatosGTMNegocio\Services\AdobeSplitFile.cs:line 33
+FECHA: 12/11/2022 13:11:39 EXCEPCION: ServiceApiException [message =Error response received for the request: Error while copying content to a stream., requestId = 228ab6cb-2b63-490c-ab0f-ffcfa34ad6d6, httpStatusCode = 0, errorCode = UNKNOWN]
+FECHA: 12/11/2022 13:16:25 EXCEPCION: ServiceApiException [message =Error response received for the request: Error while copying content to a stream., requestId = 4761674b-3d5f-4b83-927e-bcfc76d431bb, httpStatusCode = 0, errorCode = UNKNOWN]

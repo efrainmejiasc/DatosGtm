@@ -22,7 +22,7 @@ namespace DatosGTMNegocio.Services
             this._terceroRepository = terceroRepository;
         }
 
-        public List<Tercero>  LeerArchivo(string path, string identificador)
+        public List<Tercero>  LeerArchivo(string path,Guid identificador)
         {
             var infoPdf = new ExtractPdfInfoModel();
             var elements = new List<Element>();

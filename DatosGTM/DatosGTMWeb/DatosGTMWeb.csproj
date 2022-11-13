@@ -7,7 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="excepcion\**" />
+    <Content Remove="excepcion\**" />
+    <EmbeddedResource Remove="excepcion\**" />
+    <None Remove="excepcion\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\excepcion\logexception.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
+    <None Include="wwwroot\excepcion\logexception.txt" />
   </ItemGroup>
 
   <ItemGroup>
