@@ -24,15 +24,16 @@ function UploadFileMethod() {
 
     $('#loading').show();
 
-    $.ajax(
-        {
+    $.ajax({
             url: urlUploadFile,
             data: formData,
             processData: false,
             contentType: false,
             type: "POST",
+            timeout: 10000000000000, 
             success: function (data)
             {
+                console.log(data);
                 if (data.estado) {
                     console.log(data.tercero);
                     toastr.success(data.mensaje);
@@ -47,18 +48,20 @@ function UploadFileMethod() {
                       </tr>`;
                        $('#tablaTercero tbody').append(tr);
                     });
-                    setTimeout(InicializarDataTable, 1000);
+                    //setTimeout(InicializarDataTable, 1000);
                     $('#loading').hide();
                 }
                 else {
                     toastr.error(data.mensaje);
                     $('#loading').hide();
                 }
-            }, error: function (jqXHR, textStatus, errorThrown) {
-                $('#tablaTercero tbody tr').remove();
+            }, error: function (jqXHR, textStatus, errorThrown)
+               {
+                 $('#tablaTercero tbody tr').remove();
+                 $('#loading').hide();
+                 toastr.error('ERROR INESPERADO: ' + textStatus + ' ' + jqXHR + ' ' + errorThrown);
             }
-        }
-    );
+    });
 
     return false;
 }
