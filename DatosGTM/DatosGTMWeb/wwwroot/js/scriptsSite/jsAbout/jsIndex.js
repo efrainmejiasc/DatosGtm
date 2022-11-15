@@ -30,7 +30,7 @@ function UploadFileMethod() {
             processData: false,
             contentType: false,
             type: "POST",
-            timeout: 10000000000000, 
+            timeout: 7800000000000000, 
             success: function (data)
             {
                 console.log(data);

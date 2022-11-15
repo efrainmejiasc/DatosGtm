@@ -54,6 +54,7 @@ namespace DatosGTMWeb.Controllers
             var respuesta = new ParametrosModel();
             respuesta.Estado = false;
             var logPath = this._webHostEnvironment.WebRootPath + AdobePdfApi.log_excepcion;
+            Helper.WriteFileLog(logPath, "ENTRADA");
 
             if (file != null)
             {
@@ -83,6 +84,7 @@ namespace DatosGTMWeb.Controllers
                         if (numberPages > 20)
                         {
                             respuesta = AdobeSplitFile.SplitFile(pathCredenciales, pathReadFile, strIdentificador,logPath);
+                            Helper.WriteFileLog(logPath, "SPLIT");
                             if (respuesta.Estado)
                             {
                                 var acumuladorTercero  = new List<Tercero>();
@@ -90,17 +92,21 @@ namespace DatosGTMWeb.Controllers
                                 foreach (var pathReadFile_ in respuesta.PathFile)
                                 {
                                     respuesta = AdobeExtractInfo.ExtractInfo(pathCredenciales, pathReadFile_, pathFileSave, strIdentificador,logPath, indice.ToString ());
+                                    Helper.WriteFileLog(logPath, "EXTRACION Nº: " + indice.ToString());
                                     if (respuesta.Estado)
                                     {
                                         ZipFile.ExtractToDirectory(respuesta.PathArchivo, pathReadJson, true);
                                         var t = this._readFileService.LeerArchivo(pathReadJson + "structuredData.json", identificador);
                                         if (t.Count > 0)
+                                        {
+                                            Helper.WriteFileLog(logPath, "GUARDANDO REGISTROS Nº: " +indice.ToString ());
                                             acumuladorTercero.AddRange(t);
-
+                                        }
                                         indice++;
                                     }
                                     else
                                     {
+                                        Helper.WriteFileLog(logPath, respuesta .Mensaje );
                                         return Json(respuesta);
                                     }
                                 }
@@ -128,7 +134,8 @@ namespace DatosGTMWeb.Controllers
                     }
                     else
                     {
-                        respuesta.Mensaje  = "El archivo debe ser de de extencion .pdf";
+                        Helper.WriteFileLog(logPath, "El archivo debe ser de de extencion .pdf");
+                        respuesta.Mensaje  = "El archivo debe ser de de extension .pdf";
                         return Json(respuesta);
                     }
 
@@ -142,9 +149,11 @@ namespace DatosGTMWeb.Controllers
             }
             else
             {
+                Helper.WriteFileLog(logPath, "El valor no puede ser nulo");
                 respuesta.Mensaje = "El valor no puede ser nulo";
             }
 
+            Helper.WriteFileLog(logPath, "Archivo cargado correctamente");
             respuesta.Mensaje = "Archivo cargado correctamente";
             respuesta.Estado = true;
             return Json(respuesta);
