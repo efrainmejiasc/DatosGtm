@@ -59,6 +59,7 @@ AdobePdfApi.pdf_filesToWrite = builder.Configuration["ADOBE_PDF_API:pdf_filesToW
 AdobePdfApi.pdf_filesExtract = builder.Configuration["ADOBE_PDF_API:pdf_filesExtract"];
 AdobePdfApi.file_credentials = builder.Configuration["ADOBE_PDF_API:file_credentials"];
 AdobePdfApi.log_excepcion = builder.Configuration["ADOBE_PDF_API:log_excepcion"];
+AdobePdfApi.split_number_pages = Convert.ToInt32(builder.Configuration["ADOBE_PDF_API:split_number_pages"]);
 
 var app = builder.Build();
 

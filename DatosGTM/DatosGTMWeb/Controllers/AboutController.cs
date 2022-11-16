@@ -81,7 +81,7 @@ namespace DatosGTMWeb.Controllers
                         var pathFileSave = this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesExtract + "F_" + strIdentificador + "\\";
                         var pathReadJson = this._webHostEnvironment.WebRootPath + AdobePdfApi.pdf_filesToRead + "F_" + strIdentificador + "\\";
                         
-                        if (numberPages > 20)
+                        if (numberPages > AdobePdfApi.split_number_pages)
                         {
                             respuesta = AdobeSplitFile.SplitFile(pathCredenciales, pathReadFile, strIdentificador,logPath);
                             Helper.WriteFileLog(logPath, "SPLIT");
