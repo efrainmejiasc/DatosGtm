@@ -12,7 +12,6 @@ namespace DatosGTMModelo.DataModel
     [Table("Usuario")]
     public class Usuario
     {
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column(Order = 1, TypeName = "INT")]
         public int Id { get; set; }

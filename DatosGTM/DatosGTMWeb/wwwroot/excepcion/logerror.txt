@@ -1,0 +1,2 @@
+FECHA: 14/11/2022 11:52:48 EXCEPCION: ServiceApiException [message =Error response received for the request: Error while copying content to a stream., requestId = 9d42ff08-1687-47c0-a5ae-088819895650, httpStatusCode = 0, errorCode = UNKNOWN]
+

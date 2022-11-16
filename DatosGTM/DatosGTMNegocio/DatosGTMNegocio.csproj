@@ -7,21 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="adobepdfapisettings.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="adobepdfapisettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Adobe.PDFServicesSDK" Version="3.0.0" />
     <PackageReference Include="log4net" Version="2.0.15" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="PdfSharpCore" Version="1.3.41" />
   </ItemGroup>
 
   <ItemGroup>

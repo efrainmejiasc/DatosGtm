@@ -1,9 +1,5 @@
 ﻿$(document).ready(function () {
     console.log("ready!");
-
-    var date = FechaActual();
-    $('#fechaNacimiento').val(date);
-
 });
 
 
@@ -19,14 +15,5 @@ function FechaActual() {
 
 }
 
-function GetBearerValue() {
-   var miStorage = window.localStorage;
-    var bearer = localStorage.getItem("accessToken")
-    var bearer2 = localStorage.getItem("i18nextLng")
-    console.log(bearer);
-    console.log(bearer2);
-    console.log(miStorage);
-    console.log(Window.sessionStorage);
-    console.log(Window.localStorage);
-}
+
 

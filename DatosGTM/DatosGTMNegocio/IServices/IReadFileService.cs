@@ -1,4 +1,4 @@
-﻿using DatosGTMNegocio.DTOs;
+﻿using DatosGTMModelo.DataModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace DatosGTMNegocio.IServices
 {
-    public interface IRequestService
+    public interface IReadFileService
     {
-        Task<AdobePdfApiTokenModel> ObtenerJWTAsync(string urlAdobePdfApi);
+        List<Tercero> LeerArchivo(string path, Guid identificador);
     }
 }

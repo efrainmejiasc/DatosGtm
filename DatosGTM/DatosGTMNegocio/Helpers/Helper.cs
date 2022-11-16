@@ -41,24 +41,37 @@ namespace DatosGTMNegocio.Helpers
             return File.ReadAllText(path);
         }
 
-        public static string GetKeyCertificado(string path)
+        public static bool CreateDirectory (string path)
         {
-            Dictionary<object, object> test = new Dictionary<object, object>();
-            test.Add("exp", DateTimeOffset.Now.AddDays(1).ToUnixTimeSeconds() + 600);
-            test.Add("iss", AdobePdfApi.organization_id );
-            test.Add("sub", AdobePdfApi.account_id );
-            string[] scopes = AdobePdfApi.metascope .Split(',');
-
-            foreach (string scope in scopes)
+            if (!Directory.Exists(path))
             {
-                test.Add(scope, true);
+                Directory.CreateDirectory(path);
+                return true;
             }
-            test.Add("aud", AdobePdfApi.urlAudience + AdobePdfApi.client_id);
 
-            X509Certificate2 cert = new X509Certificate2(path, AdobePdfApi.passcertificado );
-            string token = Jose.JWT.Encode(test, cert.GetRSAPrivateKey(), JwsAlgorithm.RS256);
-
-            return token;
+            return false;
         }
+
+        public static void CreateFolder(string rootPath,string identificador)
+        {
+            CreateDirectory (rootPath + AdobePdfApi.pdf_filesToWrite + "F_" + identificador);
+            CreateDirectory(rootPath + AdobePdfApi.pdf_filesExtract + "F_" + identificador);
+            CreateDirectory(rootPath + AdobePdfApi.pdf_filesToRead + "F_" + identificador);
+        }
+
+        public static bool WriteFileLog( string logPath, string excepcion)
+        {
+            var resultado = false;
+            var strLog = "FECHA: " + DateTime.Now.ToString()+ " EXCEPCION: " + excepcion  + Environment.NewLine;
+
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(logPath, true))
+            {
+                file.WriteLine(strLog);
+                resultado = true;
+            }
+
+            return resultado;
+        }
+
     }
 }

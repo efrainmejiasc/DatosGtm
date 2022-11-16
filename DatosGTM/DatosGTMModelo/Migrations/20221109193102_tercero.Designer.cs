@@ -4,6 +4,7 @@ using DatosGTMModelo.DataModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatosGTMModelo.Migrations
 {
     [DbContext(typeof(MyAppContext))]
-    partial class MyAppContextModelSnapshot : ModelSnapshot
+    [Migration("20221109193102_tercero")]
+    partial class tercero
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,48 +59,6 @@ namespace DatosGTMModelo.Migrations
                             Rol = "Cliente",
                             Id = 0
                         });
-                });
-
-            modelBuilder.Entity("DatosGTMModelo.DataModel.Tercero", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INT")
-                        .HasColumnOrder(1);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("FechaInicio")
-                        .IsRequired()
-                        .HasColumnType("VARCHAR(20)")
-                        .HasColumnOrder(5);
-
-                    b.Property<DateTime>("FechaRegistro")
-                        .HasColumnType("DATETIME")
-                        .HasColumnOrder(6);
-
-                    b.Property<Guid>("Identificador")
-                        .HasColumnType("UNIQUEIDENTIFIER")
-                        .HasColumnOrder(7);
-
-                    b.Property<string>("Nit")
-                        .IsRequired()
-                        .HasColumnType("VARCHAR(50)")
-                        .HasColumnOrder(4);
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnType("VARCHAR(500)")
-                        .HasColumnOrder(3);
-
-                    b.Property<string>("Numero")
-                        .IsRequired()
-                        .HasColumnType("VARCHAR(10)")
-                        .HasColumnOrder(2);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tercero");
                 });
 
             modelBuilder.Entity("DatosGTMModelo.DataModel.Usuario", b =>
