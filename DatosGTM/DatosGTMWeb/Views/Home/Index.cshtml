@@ -4,6 +4,8 @@
     <script src="~/js/scriptsSite/jsHome/jsIndex.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://www.google.com/recaptcha/api.js"></script>
 }
 <script>
     var urlLogin = '@Url.Action("LoginUsuario","Login")';
@@ -11,15 +13,29 @@
 
 <div class="card" style="margin-top:5%;">
     <div class="card-body">
-    
+      <div>
+            <button class="g-recaptcha btn btn-primary"
+                    data-sitekey="6LeOMZMeAAAAAI2_vQDoT3-Brtfc3KLXmEduXgXE"
+                    data-callback='onSubmit'
+                    data-action='submit'> Submit
+            </button>
+      </div>
 
-               <iframe id="_iframe"
-                       title=""
-                       src="https://portal.sat.gob.gt/portal/consulta-registro-tributario-unificado/"
-                       style="width:90%;height:900px">
-               </iframe>
-  <div>
-      <input type="button" id="btnGetBearerValue" onclick="GetBearerValue()" class="btn btn-primary" value="Obtener Bearer"/>
-  </div>
-   </div>
+        <form action="?" method="POST">
+            <div class="g-recaptcha" data-sitekey="6LeOMZMeAAAAAI2_vQDoT3-Brtfc3KLXmEduXgXE"></div>
+            <br />
+            <input type="submit" value="Submit">
+        </form>
+
+        @*<iframe id="_iframe"
+        title=""
+        src="https://portal.sat.gob.gt/portal/consulta-registro-tributario-unificado/"
+        style="width:90%;height:900px;display:none;">
+        </iframe>
+        <div>
+        <input type="button" id="btnGetBearerValue" onclick="GetBearerValue()" class="btn btn-primary" value="Obtener Bearer" style="display:none;"/>
+        </div>*@
+
+
+    </div>
 </div>
